@@ -1,0 +1,83 @@
+﻿@page "/BookEditor/{id?}"
+@inject NavigationManager _navigation
+@inject HttpClient _http
+
+<h3>Books Store</h3>
+<hr />
+<div spellcheck="false">
+    <table class="table table-borderless">
+        <tr>
+            <td>Title</td>
+            <td>
+                <input class="form-control" type="text" @bind="item.Name" />
+            </td>
+        </tr>
+        <tr>
+            <td>Author</td>
+            <td>
+                <input class="form-control" type="text" @bind="item.Author" />
+            </td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td>
+                <input class="form-control" type="text" @bind="item.Price" />
+            </td>
+        </tr>
+        <tr>
+            <td>In Stock</td>
+            <td>
+                <input type="checkbox" @bind="item.InStock" />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input class="btn btn-primary"
+                       type="submit"
+                       style="width:170px;margin:4px;"
+                       value="Update" @onclick="Save" />
+                <input class="btn btn-danger"
+                       type="button"
+                       style="width:170px;margin:4px;"
+                       value="Cancel" @onclick="Cancel" />
+            </td>
+        </tr>
+    </table>
+</div>
+<hr />
+<p>@echo</p>
+
+@code {
+    [Parameter] public string id { get; set; }
+
+    Book item = new Book();
+    string echo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (id != null) {// put
+            item = await _http.GetFromJsonAsync<Book>($"api/books/{id}");
+        }
+    }
+
+    protected async Task Save()
+    {
+        HttpResponseMessage response;
+        if (id == null) {
+            item.CreationDate = DateTime.Today;
+            response = await _http.PostAsJsonAsync($"api/books", item);
+        }
+        else {
+            response = await _http.PutAsJsonAsync($"api/books", item);
+        }
+        if (await Utils.ResponseResult(response)) {
+            _navigation.NavigateTo("/Books");
+        }
+        else {
+            echo = "The operation was not completed";
+        }
+    }
+
+    protected void Cancel() => _navigation.NavigateTo("/Books");
+}

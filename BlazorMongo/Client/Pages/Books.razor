@@ -1,0 +1,98 @@
+﻿@page "/books"
+@inject HttpClient _http
+@inject NavigationManager _navigation
+
+<h3>Books Store</h3>
+<hr />
+<p>A collection of Book objects fetched from a Mongo database</p>
+<h5>
+    <a href="/BookEditor/"><span class="oi oi-book"></span> Add Book</a>
+</h5>
+<br />
+@if (items == null) {
+    <h6>@echo</h6>
+}
+else {
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Title</td>
+                <td>Author</td>
+                <td>Price</td>
+                <td>InStock</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in items) {
+                <tr>
+                    <td>@i.Name</td>
+                    <td>@i.Author</td>
+                    <td>@i.Price</td>
+                    <td>@i.InStock</td>
+                    <td nowrap>
+                        <span style="cursor:pointer;color:goldenrod"
+                              @onclick="@(e => OnEdit(i.Id))"
+                              class="oi oi-pencil"></span>
+                        <span style="cursor:pointer;color:salmon"
+                              @onclick="@(e => OnDelete(i.Id))"
+                              class="oi oi-trash"></span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    if (items.Count == 0) {
+        <h5>
+            <a href="#"
+               @onclick:preventDefault="true"
+               @onclick="@SeedData">
+                <i class="oi oi-data-transfer-upload"></i> Add Data Sample
+            </a>
+        </h5>
+    }
+}
+
+@code {
+    List<Book> items;
+    string echo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        echo = "Queryinhg database...";
+        try {
+            items = await _http.GetFromJsonAsync<List<Book>>("api/books");
+        }
+        catch (Exception exception) {
+            echo = "Exception: " + exception.Message;
+        }
+    }
+
+    void OnCreate()
+    {
+        _navigation.NavigateTo($"BookEditor/");
+    }
+
+    void OnEdit(string id)
+    {
+        _navigation.NavigateTo($"BookEditor/{id}");
+    }
+
+    async Task OnDelete(string id)
+    {
+        items.Remove(items.Find(x => x.Id == id));
+        // update database
+        await _http.DeleteAsync($"api/books/{id}");
+    }
+
+    async Task SeedData()
+    {
+        echo = "Seeding database.collection...";
+        try {
+            items = await _http.GetFromJsonAsync<List<Book>>("api/books/SeedData");
+        }
+        catch (Exception exception) {
+            echo = "Exception: " + exception.Message;
+        }
+    }
+}
