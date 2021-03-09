@@ -10,4 +10,3 @@ In this document I show the practical and generic strategy to implement a mongoD
 
 This article is published in [Blazor Spread Blog](https://www.blazorspread.net/blogview/6) (languages EN, ES, DE)
 
-Licencia MIT
