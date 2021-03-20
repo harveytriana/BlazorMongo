@@ -27,10 +27,14 @@ namespace BlazorMongo.Server
 #endif
         public IConfiguration Configuration { get; }
 
+        readonly bool ISDEV;
+
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             PATH = env.ContentRootPath;
+
+            ISDEV = env.IsDevelopment();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -44,11 +48,14 @@ namespace BlazorMongo.Server
             services.AddSingleton<IMongoService<Book>>(MongoInitializer.Initialize<Book>(mongoSettings));
 
             // Swagger (by ilustration)
-            services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { 
-                    Title = "Blazor Mongo API", Version = "v1" 
+            if (ISDEV) {
+                services.AddSwaggerGen(c => {
+                    c.SwaggerDoc("v1", new OpenApiInfo {
+                        Title = "Blazor Mongo API",
+                        Version = "v1"
+                    });
                 });
-            });
+            }
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
