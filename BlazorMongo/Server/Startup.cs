@@ -1,4 +1,4 @@
-#define ISDEV
+#define _ISDEV
 // **********************************
 // Article BlazorSpread - BlazorMongo
 // By: Harvey Triana
@@ -45,7 +45,9 @@ namespace BlazorMongo.Server
 
             // Swagger (by ilustration)
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Blazor Mongo API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "Blazor Mongo API", Version = "v1" 
+                });
             });
         }
 
