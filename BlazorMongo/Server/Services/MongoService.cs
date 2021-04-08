@@ -58,7 +58,7 @@ namespace BlazorMongo.Server.Services
             }
             catch {
             }
-            return new List<T>();
+            return null;
         }
 
         public async Task<IEnumerable<T>> GetDocumentsAsync()

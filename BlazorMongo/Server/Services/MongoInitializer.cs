@@ -15,7 +15,9 @@ namespace BlazorMongo.Server.Services
         /// <returns></returns>
         public static MongoService<T> Initialize<T>(MongoSettings settings)
         {
-            Trace.WriteLine($"MongoInitializer for {typeof(T).Name}");
+            var fileLogger = new FileLogger();
+            fileLogger.Log($"MongoInitializer for {typeof(T).Name}");
+            fileLogger.Log($"ConnectionString {settings.ConnectionString}");
 
             var collectionName = typeof(T).Name;
             var client = new MongoClient(settings.ConnectionString);

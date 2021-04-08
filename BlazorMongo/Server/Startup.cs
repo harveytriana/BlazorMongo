@@ -1,4 +1,3 @@
-#define _ISDEV
 // **********************************
 // Article BlazorSpread - BlazorMongo
 // By: Harvey Triana
@@ -16,25 +15,17 @@ namespace BlazorMongo.Server
 {
     public class Startup
     {
-        // for static files
         public static string PATH { get; private set; }
+        public static bool ISDEVELOPER { get; private set; }
 
-        // set mongoDb service, local or cloud. Defined in appsettings.json
-#if(ISDEV)
-        const string USE_MONGO_SETTINGS = "MongoNetWork";
-#else
-        const string USE_MONGO_SETTINGS = "MongoAtlas";
-#endif
         public IConfiguration Configuration { get; }
-
-        readonly bool ISDEV;
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             PATH = env.ContentRootPath;
 
-            ISDEV = env.IsDevelopment();
+            ISDEVELOPER = env.IsDevelopment();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -43,12 +34,13 @@ namespace BlazorMongo.Server
             services.AddRazorPages();
 
             // mongodb
-            var mongoSettings = Configuration.GetSection(USE_MONGO_SETTINGS).Get<MongoSettings>();
+            var connectionName = ISDEVELOPER ? "MongoNetWork" : "MongoAtlas";
+            var mongoSettings = Configuration.GetSection(connectionName).Get<MongoSettings>();
             // collections
             services.AddSingleton<IMongoService<Book>>(MongoInitializer.Initialize<Book>(mongoSettings));
 
             // Swagger (by ilustration)
-            if (ISDEV) {
+            if (ISDEVELOPER) {
                 services.AddSwaggerGen(c => {
                     c.SwaggerDoc("v1", new OpenApiInfo {
                         Title = "Blazor Mongo API",
