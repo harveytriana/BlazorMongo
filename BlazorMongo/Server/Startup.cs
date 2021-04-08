@@ -34,7 +34,7 @@ namespace BlazorMongo.Server
             services.AddRazorPages();
 
             // mongodb
-            var connectionName = ""; // ISDEVELOPER ? "MongoNetWork" : "MongoAtlas";
+            var connectionName = ISDEVELOPER ? "MongoNetWork" : "MongoAtlas";
 
             var mongoSettings = Configuration.GetSection(connectionName).Get<MongoSettings>();
             // collections
