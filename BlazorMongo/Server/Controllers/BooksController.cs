@@ -2,25 +2,23 @@
 // Article BlazorSpread - BlazorMongo
 // By: Harvey Triana
 // **********************************
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using BlazorMongo.Server.Services;
 using BlazorMongo.Shared.Models;
+
+using Microsoft.AspNetCore.Mvc;
+
 using MongoDB.Driver;
 
 namespace BlazorMongo.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksController : ControllerBase
+    public class BooksController(IMongoService<Book> ms) : ControllerBase
     {
-        readonly IMongoService<Book> _ms;
-
-        public BooksController(IMongoService<Book> ms)
-        {
-            _ms = ms;
-        }
+        readonly IMongoService<Book> _ms = ms;
 
         // GET: api/<BooksController>
         [HttpGet]
