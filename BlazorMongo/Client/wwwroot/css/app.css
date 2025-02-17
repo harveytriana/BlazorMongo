@@ -2,12 +2,7 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: whitesmoke;
     font-size: 13px;
-}
-
-h1 {
-    color: darkgoldenrod
 }
 
 h4 {
@@ -62,4 +57,12 @@ a, .btn-link {
 .center-center {
     text-align: center;
     width: 100%;
+}
+
+.app-init {
+    width: 100%;
+    text-align: center;
+    margin-top: 8em;
+    color: silver;
+    font-size: 1.5em;
 }

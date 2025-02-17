@@ -2,6 +2,14 @@
 @inject HttpClient _http
 @inject NavigationManager _navigation
 
+<style>
+    .table td, .table th {
+        padding: 2px;
+        font-family: Consolas;
+        font-size: 12px;
+    }
+</style>
+
 <h3>Books Store</h3>
 <hr />
 <p>A collection of Book objects fetched from a Mongo database</p>
@@ -16,11 +24,11 @@ else {
     <table class="table">
         <thead>
             <tr>
-                <td>Title</td>
-                <td>Author</td>
-                <td>Price</td>
-                <td>InStock</td>
-                <td></td>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th>InStock</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
