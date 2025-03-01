@@ -4,6 +4,7 @@
 // **********************************
 using BlazorMongo.Server.Services;
 using BlazorMongo.Shared.Models;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -41,7 +42,7 @@ namespace BlazorMongo.Server
             services.AddSingleton<IMongoService<Book>>(MongoInitializer.Initialize<Book>(mongoSettings));
 
             // Swagger (by ilustration)
-            if (ISDEVELOPER) {
+            if(ISDEVELOPER) {
                 services.AddSwaggerGen(c => {
                     c.SwaggerDoc("v1", new OpenApiInfo {
                         Title = "Blazor Mongo API",
@@ -53,7 +54,7 @@ namespace BlazorMongo.Server
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) {
+            if(env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
 
